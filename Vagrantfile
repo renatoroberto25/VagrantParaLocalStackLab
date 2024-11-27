@@ -10,24 +10,28 @@ Vagrant.configure("2") do |config|
       drink.vm.network "private_network", ip: "192.168.56.50"
       #Nome da vm
       drink.vm.hostname = "caipirinha"
+
+      CONFIGURA_PATH = "/home/renato/VirtualBox VMs/001-Server/configura.sh"
+      LOCALSTACK_PATH = "/home/renato/VirtualBox VMs/001-Server/localstack-cli-4.0.0-linux-amd64-onefile.tar.gz"
+      VSCODE_PATH = "/home/renato/VirtualBox VMs/001-Server/code_1.95.3-1731513102_amd64.deb"
   
       # Checando se o configura.sh existe localmente
-      if File.exist?("configura.sh")
-        drink.vm.provision "file", source: "configura.sh", destination: "/home/vagrant/configura.sh"
+      if File.exist?(CONFIGURA_PATH)
+        drink.vm.provision "file", source: CONFIGURA_PATH, destination: "/home/vagrant/configura.sh"
       else
         abort "configura.sh não encontrado. Verifique se o script está no diretório atual."
       end
-  
-      # Checando o arquivo de instalação do localstack, nesse caso localstack-cli-4.0.0-linux-amd64-onefile.tar.gz
-      if File.exist?("/home/renato/VirtualBox VMs/001-Server/localstack-cli-4.0.0-linux-amd64-onefile.tar.gz")
-        drink.vm.provision "file", source: "/home/renato/VirtualBox VMs/001-Server/localstack-cli-4.0.0-linux-amd64-onefile.tar.gz", destination: "/home/vagrant/localstack-cli.tar.gz"
+
+      # Checando o arquivo de instalação do localstack
+      if File.exist?(LOCALSTACK_PATH)
+        drink.vm.provision "file", source: LOCALSTACK_PATH, destination: "/home/vagrant/localstack-cli.tar.gz"
       else
-        abort "Arquivo do LocalStack não encontrado. Certifique-se de que está no diretório atual."
+        abort "Arquivo do LocalStack não encontrado."
       end
   
       # Checando o pacote do VS Code(.deb) existe
-      if File.exist?("/home/renato/VirtualBox VMs/001-Server/code_1.95.3-1731513102_amd64.deb")
-        drink.vm.provision "file", source: "/home/renato/VirtualBox VMs/001-Server/code_1.95.3-1731513102_amd64.deb", destination: "/home/vagrant/code_1.95.3-1731513102_amd64.deb"
+      if File.exist?(VSCODE_PATH)
+        drink.vm.provision "file", source: VSCODE_PATH, destination: "/home/vagrant/code_amd64.deb"
       else
         abort "Arquivo do VS Code .deb não encontrado. Certifique-se de que está no diretório atual."
       end
@@ -53,7 +57,7 @@ Vagrant.configure("2") do |config|
         sudo bash /home/vagrant/configura.sh || { echo "Erro ao executar configura.sh"; exit 1; }
   
         # Instalar o VS Code a partir do .deb
-        sudo gdebi -n /home/vagrant/code_1.95.3-1731513102_amd64.deb
+        sudo gdebi -n /home/vagrant/code_amd64.deb
   
         # Extrair e instalar o LocalStack CLI
         sudo tar -xvzf /home/vagrant/localstack-cli.tar.gz -C /usr/local/bin

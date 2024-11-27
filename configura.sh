@@ -6,19 +6,17 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o 
 sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
 # Adiciona o repositório do Docker (ajustando para Ubuntu)
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-  https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-# Instala Docker e outras ferramentas necessárias
+# Atualiza os repositórios e instala Docker e outras ferramentas necessárias
+sudo apt-get update -y
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose
 
 # Instala o Terraform
-sudo apt install gnupg software-properties-common -y;
-wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg;
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list;
-sudo apt update;
+sudo apt install gnupg software-properties-common -y
+wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update
 sudo apt install terraform -y
 
 # Configurações de AWS LocalStack
@@ -41,7 +39,7 @@ mkdir -p /home/renato/TERRAFORM
 cd /home/renato/TERRAFORM
 python3.12 -m venv TerraNova
 python3.12 -m ensurepip --upgrade
-#No env TerraNova eu instalo o tf: pip install terraform-local
+# No env TerraNova eu instalo o tf: pip install terraform-local
 # Permissões
 sudo chown -R renato:renato /home/renato/TERRAFORM
 
@@ -71,9 +69,9 @@ sudo timedatectl set-timezone America/Sao_Paulo
 # Configuração de alguns aliases que eu uso
 sudo bash -c 'cat >> /etc/bash.bashrc <<EOL
 
-# Aliases customizados
+# ll para maior agilidade
 alias ll="ls -l"
-#abaixo o que eu costumo usar para localstack
+# Awscli para localstack
 alias aws="aws --endpoint-url=http://\$LOCALSTACK_HOST:4566"
 EOL'
 
