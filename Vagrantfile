@@ -57,7 +57,8 @@ Vagrant.configure("2") do |config|
         sudo bash /home/vagrant/configura.sh || { echo "Erro ao executar configura.sh"; exit 1; }
   
         # Instalar o VS Code a partir do .deb
-        sudo gdebi -n /home/vagrant/code_amd64.deb
+        #sudo gdebi -n /home/vagrant/code_amd64.deb
+        sudo dpkg -i /home/vagrant/code_amd64.deb || sudo apt-get install -f -y
   
         # Extrair e instalar o LocalStack CLI
         sudo tar -xvzf /home/vagrant/localstack-cli.tar.gz -C /usr/local/bin
